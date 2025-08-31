@@ -16,7 +16,10 @@ import fileUpload from "express-fileupload";
 
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+   origin: [
+      "http://localhost:5173", // local frontend
+      "https://job-seeking-portal-anup.vercel.app", // production frontend
+    ],
     methods: ["GET", "POST", "DELETE", "PUT"],
     credentials: true,
   })
