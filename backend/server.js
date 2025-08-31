@@ -46,7 +46,7 @@ app.use(
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/job", jobRouter);
 app.use("/api/v1/application", applicationRouter);
-await dbConnection();
+dbConnection();
 
 app.get("/", (req, res) => {
   res.send("API is running!");
