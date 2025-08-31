@@ -1,6 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
+const app = express();
+import cookieParser from "cookie-parser";
+app.use(cookieParser());
 import dbConnection from "./database/dbConnection.js";
 import jobRouter from "./routes/jobRoutes.js";
 import userRouter from "./routes/userRoutes.js";
@@ -8,12 +11,8 @@ import applicationRouter from "./routes/applicationRoutes.js";
 import cors from "cors";
 import cloudinary from "cloudinary";
 import { errorMiddleware } from "./middlewares/error.js";
-import cookieParser from "cookie-parser";
 import fileUpload from "express-fileupload";
 
-
-
-const app = express();
 
 app.use(
   cors({
@@ -23,7 +22,7 @@ app.use(
   })
 );
 
-app.use(cookieParser());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
