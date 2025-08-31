@@ -11,22 +11,20 @@ export const postApplication = catchAsyncErrors(async (req, res, next) => {
       new ErrorHandler("Employer not allowed to access this resource.", 400)
     );
   }
-
   if (!req.files || Object.keys(req.files).length === 0) {
     return next(new ErrorHandler("Resume File Required!", 400));
   }
 
   const { resume } = req.files;
-
-  const allowedFormats = ["application/pdf"];
+  const allowedFormats = ["image/png", "image/jpeg", "image/webp"];
   if (!allowedFormats.includes(resume.mimetype)) {
-    return next(new ErrorHandler("Invalid file type. Please upload a PDF file.", 400));
+    return next(
+      new ErrorHandler("Invalid file type. Please upload a PNG file.", 400)
+    );
   }
-
-  
-  const cloudinaryResponse = await cloudinary.uploader.upload(resume.tempFilePath, {
-    resource_type: "raw", 
-  });
+  const cloudinaryResponse = await cloudinary.uploader.upload(
+    resume.tempFilePath
+  );
 
   if (!cloudinaryResponse || cloudinaryResponse.error) {
     console.error(
@@ -35,18 +33,14 @@ export const postApplication = catchAsyncErrors(async (req, res, next) => {
     );
     return next(new ErrorHandler("Failed to upload Resume to Cloudinary", 500));
   }
-
   const { name, email, coverLetter, phone, address, jobId } = req.body;
-
   const applicantID = {
     user: req.user._id,
     role: "Job Seeker",
   };
-
   if (!jobId) {
     return next(new ErrorHandler("Job not found!", 404));
   }
-
   const jobDetails = await Job.findById(jobId);
   if (!jobDetails) {
     return next(new ErrorHandler("Job not found!", 404));
@@ -56,11 +50,18 @@ export const postApplication = catchAsyncErrors(async (req, res, next) => {
     user: jobDetails.postedBy,
     role: "Employer",
   };
-
-  if (!name || !email || !coverLetter || !phone || !address) {
+  if (
+    !name ||
+    !email ||
+    !coverLetter ||
+    !phone ||
+    !address ||
+    !applicantID ||
+    !employerID ||
+    !resume
+  ) {
     return next(new ErrorHandler("Please fill all fields.", 400));
   }
-
   const application = await Application.create({
     name,
     email,
@@ -71,10 +72,9 @@ export const postApplication = catchAsyncErrors(async (req, res, next) => {
     employerID,
     resume: {
       public_id: cloudinaryResponse.public_id,
-      url: cloudinaryResponse.secure_url, 
+      url: cloudinaryResponse.secure_url,
     },
   });
-
   res.status(200).json({
     success: true,
     message: "Application Submitted!",

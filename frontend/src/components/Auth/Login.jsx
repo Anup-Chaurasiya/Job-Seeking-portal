@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { MdOutlineMailOutline } from "react-icons/md";
 import { RiLock2Fill } from "react-icons/ri";
 import { Link, Navigate } from "react-router-dom";
@@ -6,6 +6,7 @@ import { FaRegUser } from "react-icons/fa";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Context } from "../../main";
+
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -18,7 +19,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "http://localhost:4000/api/v1/user/login",
+        `${import.meta.env.VITE_API_URL}/api/v1/user/login`,
         { email, password, role },
         {
           headers: {
@@ -37,9 +38,18 @@ const Login = () => {
     }
   };
 
+  useEffect(() => {
+  document.body.classList.add("auth-page");
+  return () => {
+    document.body.classList.remove("auth-page");
+  };
+}, []);
+
+
   if(isAuthorized){
     return <Navigate to={'/'}/>
   }
+
 
   return (
     <>

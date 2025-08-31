@@ -22,7 +22,7 @@ const Register = () => {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "http://localhost:4000/api/v1/user/register",
+        `${import.meta.env.VITE_API_URL}/api/v1/user/register`,
         { name, phone, email, role, password },
         {
           headers: {
@@ -42,6 +42,13 @@ const Register = () => {
       toast.error(error.response.data.message);
     }
   };
+
+    useEffect(() => {
+    document.body.classList.add("auth-page");
+    return () => {
+      document.body.classList.remove("auth-page");
+    };
+  }, []);
 
   if(isAuthorized){
     return <Navigate to={'/'}/>
