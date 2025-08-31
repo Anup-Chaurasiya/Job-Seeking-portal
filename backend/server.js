@@ -16,7 +16,7 @@ import fileUpload from "express-fileupload";
 
 app.use(
   cors({
-    origin: [process.env.FRONTEND_URL],
+    origin: process.env.FRONTEND_URL,
     methods: ["GET", "POST", "DELETE", "PUT"],
     credentials: true,
   })
@@ -44,6 +44,11 @@ app.use("/api/v1/user", userRouter);
 app.use("/api/v1/job", jobRouter);
 app.use("/api/v1/application", applicationRouter);
 dbConnection();
+
+app.get("/", (req, res) => {
+  res.send("API is running!");
+});
+
 
 
 app.use(errorMiddleware);
