@@ -26,6 +26,8 @@ Hosting: Vercel (Frontend), Render/Heroku (Backend), MongoDB Atlas
 
 📸 Screenshots
 
+<img width="1920" height="1080" alt="Screenshot (10)" src="https://github.com/user-attachments/assets/f244a21d-bb10-4eb1-a0e1-161705531e14" />
+
 <img width="1920" height="1080" alt="Screenshot (9)" src="https://github.com/user-attachments/assets/34a1088d-e6ad-4f9b-a621-51b5be19a5fd" />
 
 
